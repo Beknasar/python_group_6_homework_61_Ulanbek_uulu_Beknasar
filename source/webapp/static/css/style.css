@@ -71,6 +71,9 @@ body {
 	color: #7e8287;
 }
 
+.ta {
+    text-align: right;
+}
 
 .card-content{
 	text-align: center;
@@ -119,33 +122,35 @@ body {
 .button {
     width:  298px;
 	height: 50px;
-
 	color: white;
 	font-size: 14px;
 	text-decoration: none;
 	text-transform: uppercase;
 	display: inline-block;
+    justify-content: space-around;
 	border-radius: 5px;
     border: #7e8287 solid 1px;
 	line-height: 50px;
 }
+
+
 .accept {
-    background: darkcyan;
+    background: crimson;
 }
 .cancel {
     background: #7e8287;
-    color: white;
 }
+
 .button:hover {
-    background: darkslategrey;
+    background: brown;
     color: white;
 }
-.chekbox{
-    text-align: left;
-}
+
 .cancel:hover {
-    background: darkgray;
+    background: #33363b;
+    color: white;
 }
+
 .pre {
     white-space: pre;
 }
@@ -155,3 +160,4 @@ body {
     color: red;
     margin-top: 2px;
 }
+
