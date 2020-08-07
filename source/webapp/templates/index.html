@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Tasks{% endblock %}
+{% block content %}
+<h1>Задачи:</h1>
+    <div class = "tasks">
+        {% for task in tasks %}
+            <div class="card">
+                <div class="card-content">
+                <h3><a href="/tasks/{{ task.pk }}" class="card-button">{{ task.pk }}. {{ task.title }}</a></h3>
+                    <i class="far fa-edit"></i>
+                <p>Статус: {{ task.status }}</p>
+                <p>Дата выполнения: {{ task.task_create }}</p>
+            </div>
+		</div>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block footer %}
+ <div class="container-foot">
+			<footer class="footer">
+			<p>©TASK_SITE</p>
+			</footer>
+ </div>
+{% endblock %}
