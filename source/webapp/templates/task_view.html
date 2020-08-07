@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}View{% endblock %}
+
+{% block menu %}
+    <li><a href="{% url 'task_update' task.pk %}">Update</a></li>
+    <li><a href="{% url 'task_delete' task.pk %}">Delete</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="task_view">
+        <h1>{{ task.summary }}</h1>
+        <p>Статус: {{ task.status }}</p>
+        <p>Тип: {{ task.type }}</p>
+        <p>Дата выполнения: {{task.task_create}}</p>
+        <label>Описание:</label>
+        <p class="pre">{{ task.description }}</p>
+    </div>
+{% endblock %}

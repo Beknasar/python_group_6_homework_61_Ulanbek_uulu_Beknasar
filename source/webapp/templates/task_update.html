@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Update{% endblock %}
+
+{% block menu %}
+    <li><a href="{% url 'task_view' task.pk %}">Cancel</a></li>
+{% endblock %}
+
+{% block content %}
+    <h1>Update Task</h1>
+{#        {% for field in form %}#}
+{#            {% include 'partial/form_field.html' %}#}
+{#        {% endfor %}#}
+        {% url 'task_update' pk=task.pk as action_url %}
+        {% include 'partial/form.html' with action_url=action_url form_method='post' %}
+{% endblock %}

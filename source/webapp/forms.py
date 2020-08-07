@@ -1,14 +1,13 @@
 from django import forms
-# from .models import STATUS_CHOICES
+from .models import Status, Type
 #
 # default_status = STATUS_CHOICES[0][0]
 
 class TaskForm(forms.Form):
-    title = forms.CharField(max_length=200, required=True, label='Название')
-    description = forms.CharField(max_length=500, required=True, label='Описание', widget=forms.Textarea)
-    #status = forms.ChoiceField(choices=STATUS_CHOICES, required=True, label='Статус',
-                               #initial=default_status)
-    task_deadline = forms.DateTimeField(required=False, label='Дата выполнения', widget=forms.DateInput(attrs={'type': 'date'}))
+    summary = forms.CharField(max_length=200, required=True, label='Название')
+    description = forms.CharField(max_length=2000, required=True, label='Описание', widget=forms.Textarea)
+    status = forms.ModelChoiceField(queryset=Status.objects.all())
+    type = forms.ModelChoiceField(queryset=Type.objects.all())
 
     def __str__(self):
         return "{}. {}".format(self.pk, self.title)

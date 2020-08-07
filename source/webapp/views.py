@@ -5,79 +5,103 @@ from django.views.generic import View, TemplateView
 from django.http import HttpResponseNotAllowed
 from .forms import TaskForm
 
-class IndexView(View):
-    def get(self, request, *args, **kwargs):
-        data = Tasks.objects.all()
-        return render(request, 'index.html', context={'tasks': data})
+class IndexView(TemplateView):
+    template_name = 'index.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-def task_view(request, pk):
-    task = get_object_or_404(Tasks, pk=pk)
-    context = {'task': task}
-    return render(request, 'task_view.html', context)
+        context['tasks']=Tasks.objects.all()
+        return context
 
-def create_task_view(request):
-    if request.method == 'GET':
+
+class TaskView(TemplateView):
+    template_name = 'task_view.html'
+    def get_context_data(self, **kwargs):
+        context =super().get_context_data(**kwargs)
+
+        pk = self.kwargs.get('pk')
+        task = get_object_or_404(Tasks, pk=pk)
+
+        context['task'] = task
+        return context
+
+class TaskCreateView(View):
+    def get(self, request):
         form = TaskForm()
         return render(request, 'task_create.html', context={
             'form': form
         })
-    elif request.method == 'POST':
-        #print(request.POST)
+    def post(self, request):
         form = TaskForm(data=request.POST)
-        # date = request.POST.get('date')
-        # if date == '':
-        #     date = None
         if form.is_valid():
             task = Tasks.objects.create(
-                title=form.cleaned_data['title'],
+                summary=form.cleaned_data['summary'],
                 description = form.cleaned_data['description'],
-                status = form.cleaned_data['status'],
-                task_deadline = form.cleaned_data['task_deadline'])
+                type = form.cleaned_data['type'],
+                status = form.cleaned_data['status'],)
 
             return redirect('task_view', pk=task.pk)
         else:
             return render(request, 'task_create.html', context={
                 'form': form
             })
-    else:
-        return HttpResponseNotAllowed(
-            permitted_methods=['GET', 'POST'])
 
-def update_view(request, pk):
-    task = get_object_or_404(Tasks, pk=pk)
-    if request.method == "GET":
+class UpdateView(TemplateView):
+    template_name = 'task_update.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        task = get_object_or_404(Tasks, pk=pk)
         form = TaskForm(initial={
-            'title': task.title,
+            'summary': task.summary,
             'description': task.description,
-            'task_deadline': task.task_deadline,
+            'type': task.type,
             'status': task.status
         })
-        return render(request, 'task_update.html', context={
-            'form': form,
-            'task': task
-        })
-    elif request.method == "POST":
+        context['task'] = task
+        context['form'] = form
+        return context
+
+    def post(self, request, pk):
        form = TaskForm(data=request.POST)
+       task = get_object_or_404(Tasks, pk=pk)
        if form.is_valid():
-            task.title = form.cleaned_data['title']
+            task.summary = form.cleaned_data['summary']
             task.description = form.cleaned_data['description']
             task.status = form.cleaned_data['status']
-            task.task_deadline = form.cleaned_data['task_deadline']
+            task.type = form.cleaned_data['type']
             task.save()
             return redirect('task_view', pk=task.pk)
        else:
-            return render(request, 'task_update.html', context={
+            return self.render_to_response(context={
                 'task': task,
                 'form': form
             })
 
-    else:
-        return HttpResponseNotAllowed(permitted_methods=['GET', 'POST'])
 
-def delete_view(request, pk):
-    task = get_object_or_404(Tasks, pk=pk)
-    if request.method == 'GET':
+class DeleteView(View):
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        task = get_object_or_404(Tasks, pk=pk)
         return render(request, 'task_delete.html', context={'task': task})
-    elif request.method == 'POST':
+
+    def post(self, request, pk):
+        task = get_object_or_404(Tasks, pk=pk)
         task.delete()
         return redirect('index')
+
+# class DeleteView(TemplateView):
+#     template_name = 'task_delete.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         pk = self.kwargs.get('pk')
+#         task = get_object_or_404(Tasks, pk=pk)
+#         context['task'] = task
+#         return context
+#
+#     def post(self, request, pk):
+#         task = get_object_or_404(Tasks, pk=pk)
+#         task.delete()
+#         return redirect('index')
