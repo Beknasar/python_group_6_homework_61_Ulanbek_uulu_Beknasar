@@ -11,6 +11,10 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         context['tasks']=Tasks.objects.all()
+
+        search = self.request.GET.get('search')
+        if search:
+            context['tasks'] = Tasks.objects.filter(summary__icontains=search)
         return context
 
 
