@@ -9,7 +9,7 @@ class Tasks(models.Model):
     summary = models.CharField(default='My title', max_length=200, null=False, blank=False, verbose_name='Название')
     description = models.TextField(max_length=2000, null=True, blank=True, verbose_name='Описание')
     status = models.ForeignKey('webapp.Status', related_name='status', on_delete=models.PROTECT, verbose_name='Статус')
-    type = models.ForeignKey('webapp.Type', related_name='type', on_delete=models.PROTECT, verbose_name='Тип')
+    types = models.ManyToManyField('webapp.Type', related_name='tasks', blank=True, verbose_name='Тип')
     task_create = models.DateField(auto_now_add=True, verbose_name='Дата создания')
 
     def __str__(self):
