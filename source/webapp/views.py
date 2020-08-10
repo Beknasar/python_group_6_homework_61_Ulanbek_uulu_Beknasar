@@ -34,12 +34,11 @@ class TaskCreateView(View):
     def post(self, request):
         form = TaskForm(data=request.POST)
         if form.is_valid():
-            task = Tasks.objects.create(
-                summary=form.cleaned_data['summary'],
-                description = form.cleaned_data['description'],
-                type = form.cleaned_data['type'],
-                status = form.cleaned_data['status'],)
-
+            data= {}
+            for key, value in form.cleaned_data.items():
+                if value is not None:
+                    data[key] = value
+            task=Tasks.objects.create(**data)
             return redirect('task_view', pk=task.pk)
         else:
             return render(request, 'task_create.html', context={
@@ -53,12 +52,11 @@ class UpdateView(TemplateView):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs.get('pk')
         task = get_object_or_404(Tasks, pk=pk)
-        form = TaskForm(initial={
-            'summary': task.summary,
-            'description': task.description,
-            'type': task.type,
-            'status': task.status
-        })
+
+        initial = {}
+        for key in 'summary', 'description', 'type', 'status':
+            initial[key] = getattr(task, key)
+        form = TaskForm(initial=initial)
         context['task'] = task
         context['form'] = form
         return context
@@ -67,10 +65,9 @@ class UpdateView(TemplateView):
        form = TaskForm(data=request.POST)
        task = get_object_or_404(Tasks, pk=pk)
        if form.is_valid():
-            task.summary = form.cleaned_data['summary']
-            task.description = form.cleaned_data['description']
-            task.status = form.cleaned_data['status']
-            task.type = form.cleaned_data['type']
+            for key, value in form.cleaned_data.items():
+                if value is not None:
+                    setattr(task, key, value)
             task.save()
             return redirect('task_view', pk=task.pk)
        else:
@@ -90,18 +87,3 @@ class DeleteView(View):
         task = get_object_or_404(Tasks, pk=pk)
         task.delete()
         return redirect('index')
-
-# class DeleteView(TemplateView):
-#     template_name = 'task_delete.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         pk = self.kwargs.get('pk')
-#         task = get_object_or_404(Tasks, pk=pk)
-#         context['task'] = task
-#         return context
-#
-#     def post(self, request, pk):
-#         task = get_object_or_404(Tasks, pk=pk)
-#         task.delete()
-#         return redirect('index')

@@ -52,25 +52,6 @@ body {
     text-decoration: underline;
 }
 
-
-.container-foot{
-	text-align: center;
-	font-size: 12px;
-	text-transform: uppercase;
-	font-style: normal;
-	font-weight: normal;
-}
-
-.footer{
-	height: 79px;
-	background: #000;
-}
-.footer p{
-	padding-top: 25px;
-	display: inline-block;
-	color: #7e8287;
-}
-
 .ta {
     text-align: right;
 }
@@ -161,3 +142,34 @@ body {
     margin-top: 2px;
 }
 
+.form-input {
+    border-radius: 5px;
+    border: solid 1px lightgray;
+    background: darkcyan;
+    color: white;
+    padding: 3px 5px;
+}
+
+.form-input:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.form-error {
+    border: solid 1px red;
+    background: darkred;
+}
+
+.form-error:focus {
+    box-shadow: 0 0 5px rgb(255, 0, 0);
+}
+
+.red {
+    color: red;
+    font-weight: bold;
+}
+
+.search-form {
+    display: inline-block;
+    float: right;
+}
