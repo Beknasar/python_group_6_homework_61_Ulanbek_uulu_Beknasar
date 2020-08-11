@@ -48,40 +48,43 @@ class TaskCreateView(FormView):
     def get_success_url(self):
         return reverse('task_view', kwargs={'pk': self.task.pk})
 
-class UpdateView(TemplateView):
+class UpdateView(FormView):
     template_name = 'task_update.html'
+    form_class = TaskForm
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Tasks, pk=pk)
+
+    def dispatch(self, request, *args, **kwargs):
+        self.task = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        initial = {}
+        for key in 'summary', 'description', 'status':
+            initial[key] = getattr(self.task, key)
+        initial['types'] = self.task.types.all()
+        return initial
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pk = self.kwargs.get('pk')
-        task = get_object_or_404(Tasks, pk=pk)
-
-        initial = {}
-        for key in 'summary', 'description', 'status':
-            initial[key] = getattr(task, key)
-        initial['types'] = task.types.all()
-        form = TaskForm(initial=initial)
-        context['task'] = task
-        context['form'] = form
+        context['task'] = self.task
         return context
 
-    def post(self, request, pk):
-       form = TaskForm(data=request.POST)
-       task = get_object_or_404(Tasks, pk=pk)
-       if form.is_valid():
-            types = form.cleaned_data.pop('types')
-            for key, value in form.cleaned_data.items():
-                if value is not None:
-                    setattr(task, key, value)
-            task.save()
-            task.types.set(types)
-            return redirect('task_view', pk=task.pk)
-       else:
-            return self.render_to_response(context={
-                'task': task,
-                'form': form
-            })
+    def form_valid(self, form):
+        types = form.cleaned_data.pop('types')
 
+        for key, value in form.cleaned_data.items():
+            if value is not None:
+                setattr(self.task, key, value)
+        self.task.save()
+        self.task.types.set(types)
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('task_view', kwargs={'pk': self.task.pk})
 
 class DeleteView(View):
     def get(self, request, *args, **kwargs):
