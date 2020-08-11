@@ -11,7 +11,9 @@
     <div class="task_view">
         <h1>{{ task.summary }}</h1>
         <p>Статус: {{ task.status }}</p>
-        <p>Тип: {{ task.type }}</p>
+{#        <p>Тип: {{ task.types }}</p>#}
+        <p>Типы: {% for type in task.types.all %}{{ type.name }}{% if not forloop.last %}, {% endif %}{% endfor %}.
+        </p>
         <p>Дата выполнения: {{task.task_create}}</p>
         <label>Описание:</label>
         <p class="pre">{{ task.description }}</p>

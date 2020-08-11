@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+
 from webapp.models import Tasks
-from django.views.generic import View, TemplateView
+from django.views.generic import View, TemplateView, FormView
 
 from django.http import HttpResponseNotAllowed
 from .forms import TaskForm
@@ -29,25 +31,22 @@ class TaskView(TemplateView):
         context['task'] = task
         return context
 
-class TaskCreateView(View):
-    def get(self, request):
-        form = TaskForm()
-        return render(request, 'task_create.html', context={
-            'form': form
-        })
-    def post(self, request):
-        form = TaskForm(data=request.POST)
-        if form.is_valid():
-            data= {}
-            for key, value in form.cleaned_data.items():
-                if value is not None:
-                    data[key] = value
-            task=Tasks.objects.create(**data)
-            return redirect('task_view', pk=task.pk)
-        else:
-            return render(request, 'task_create.html', context={
-                'form': form
-            })
+class TaskCreateView(FormView):
+    template_name = 'task_create.html'
+    form_class = TaskForm
+
+    def form_valid(self, form):
+        data= {}
+        types = form.cleaned_data.pop('types')
+        for key, value in form.cleaned_data.items():
+            if value is not None:
+                data[key] = value
+        self.task=Tasks.objects.create(**data)
+        self.task.types.set(types)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('task_view', kwargs={'pk': self.task.pk})
 
 class UpdateView(TemplateView):
     template_name = 'task_update.html'
@@ -58,8 +57,9 @@ class UpdateView(TemplateView):
         task = get_object_or_404(Tasks, pk=pk)
 
         initial = {}
-        for key in 'summary', 'description', 'type', 'status':
+        for key in 'summary', 'description', 'status':
             initial[key] = getattr(task, key)
+        initial['types'] = task.types.all()
         form = TaskForm(initial=initial)
         context['task'] = task
         context['form'] = form
@@ -69,10 +69,12 @@ class UpdateView(TemplateView):
        form = TaskForm(data=request.POST)
        task = get_object_or_404(Tasks, pk=pk)
        if form.is_valid():
+            types = form.cleaned_data.pop('types')
             for key, value in form.cleaned_data.items():
                 if value is not None:
                     setattr(task, key, value)
             task.save()
+            task.types.set(types)
             return redirect('task_view', pk=task.pk)
        else:
             return self.render_to_response(context={
