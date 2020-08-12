@@ -8,8 +8,7 @@
     "status": 1,
     "task_create": "2020-08-07",
     "types": [
-      1,
-      2
+      3
     ]
   }
 },
@@ -22,7 +21,7 @@
     "status": 3,
     "task_create": "2020-08-07",
     "types": [
-      1
+      2
     ]
   }
 },
@@ -44,11 +43,12 @@
   "pk": 5,
   "fields": {
     "summary": "\u041f\u043e\u0437\u0432\u043e\u043d\u0438\u0442\u044c \u0440\u043e\u0434\u043d\u044b\u043c",
-    "description": "",
+    "description": "\u041f\u043e\u0437\u0432\u043e\u043d\u0438\u0442\u044c \u0434\u0435\u0434\u0443",
     "status": 3,
     "task_create": "2020-08-07",
     "types": [
-      2
+      1,
+      3
     ]
   }
 },
