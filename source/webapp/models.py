@@ -1,6 +1,8 @@
 from django.core.validators import MinLengthValidator
 from django.db import models
 
+
+
 class Tasks(models.Model):
     summary = models.CharField(default='My title', max_length=200, null=False, blank=False, verbose_name='Название',
                                validators=[MinLengthValidator(10)])
