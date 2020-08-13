@@ -6,13 +6,13 @@ body {
     /* отступ, чтобы компенсировать высоту навбара */
     margin-top: 60px;
     background: #e1e7ed;
-    text-align: center;
 }
 
 .container {
     margin: 0 auto;
     width: 100%;
     max-width: 900px;
+    text-align: center;
 }
 
 .navbar {
@@ -172,4 +172,15 @@ body {
 .search-form {
     display: inline-block;
     float: right;
+}
+
+.form-checkboxes {
+    /*text-align: left;*/
+    list-style: none;
+    margin: 0;
+    padding: 5px 0 5px 10px;
+}
+
+.form-checkboxes li {
+    padding: 3px;
 }
