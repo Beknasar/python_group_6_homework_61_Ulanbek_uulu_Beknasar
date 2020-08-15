@@ -15,6 +15,7 @@
         <p>Типы: {% for type in task.types.all %}{{ type.name }}{% if not forloop.last %}, {% endif %}{% endfor %}.
         </p>
         <p>Дата выполнения: {{task.task_create}}</p>
+        <p>Дата обновления: {{ task.task_update }}</p>
         <label>Описание:</label>
         <p class="pre">{{ task.description }}</p>
     </div>

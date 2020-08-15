@@ -10,6 +10,7 @@ class Tasks(models.Model):
     status = models.ForeignKey('webapp.Status', related_name='status', on_delete=models.PROTECT, verbose_name='Статус')
     types = models.ManyToManyField('webapp.Type', related_name='tasks', blank=True, verbose_name='Тип')
     task_create = models.DateField(auto_now_add=True, verbose_name='Дата создания')
+    task_update = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
 
     def __str__(self):
         return "{}. {}".format(self.pk, self.summary)
