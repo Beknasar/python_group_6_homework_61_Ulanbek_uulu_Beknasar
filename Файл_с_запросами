@@ -1,0 +1,31 @@
+Библиотеки:
+from django.db.models import Q, F
+from datetime import timedelta
+from webapp.models import Tasks, Type
+from django.utils import timezone
+
+1. Закрытые задачи за последний месяц от текущей даты (вхождение определяйте по дате последнего обновления).
+now = timezone.now()
+Tasks.objects.filter(task_update__gte=now-timedelta(days=30), status__name__endswith='ne')
+
+2. Задачи, имеющие один из указанных статусов И один из указанных типов (в запросе укажите 2 любых названия типа и 2 названия статуса, которые есть в вашей базе).
+Tasks.objects.filter(types__name__startswith='B', status__name__icontains='pro')
+Tasks.objects.filter(types__name__exact='Task', status__name__iexact='new')
+
+3. Задачи, в названии которых содержится слово "bug" в любом регистре или относящиеся к типу "Баг", имеющие НЕ закрытый статус.
+q_1 = Q(summary__icontains='bug')
+q_2 = Q(types__name = 'Bug')
+q_3 = Q(status__name__icontains='Done')
+Tasks.objects.filter(q_1|q_2, ~q_3)
+
+Бонус:
+1. Для всех задач только следующие поля: id, название задачи, название типа и название статуса.
+Tasks.objects.values('pk', 'summary', 'types__name', 'status__name')
+
+2. Задачи, где краткое описание совпадает с полным.
+Tasks.objects.filter(summary = F('description'))
+
+3. Количество задач по каждому типу.
+for type in Type.objects.all():
+    print(f"{type.name}: {type.tasks.count()}")
+
