@@ -2,28 +2,37 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from webapp.models import Tasks
-from django.views.generic import View, TemplateView, FormView
+from django.views.generic import View, TemplateView, FormView, ListView
 
 from django.http import HttpResponseNotAllowed
 from .forms import TaskForm
 
-class IndexView(TemplateView):
+class IndexView(ListView):
     template_name = 'index.html'
+    context_object_name = 'tasks'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['tasks']=Tasks.objects.all()
+        context['tasks'] = Tasks.objects.all()
 
+        # search = self.request.GET.get('search')
+        # if search:
+        #     context['tasks'] = Tasks.objects.filter(summary__icontains=search)
+        return context
+
+    def get_queryset(self):
+        data = Tasks.objects.all()
         search = self.request.GET.get('search')
         if search:
-            context['tasks'] = Tasks.objects.filter(summary__icontains=search)
-        return context
+            data = data.filter(summary__icontains=search)
+        return data.order_by('task_create')
 
 
 class TaskView(TemplateView):
     template_name = 'task_view.html'
     def get_context_data(self, **kwargs):
-        context =super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         pk = self.kwargs.get('pk')
         task = get_object_or_404(Tasks, pk=pk)
