@@ -5,32 +5,38 @@ from webapp.models import Tasks
 from django.views.generic import View, TemplateView, FormView, ListView
 
 from django.http import HttpResponseNotAllowed
-from .forms import TaskForm
+from .forms import TaskForm, SearchForm
+from django.db.models import Q, F
 
 class IndexView(ListView):
     template_name = 'index.html'
     context_object_name = 'tasks'
+    paginate_by = 10
+    paginate_orphans = 2
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['tasks'] = Tasks.objects.all()
-
-        # search = self.request.GET.get('search')
-        # if search:
-        #     context['tasks'] = Tasks.objects.filter(summary__icontains=search)
-        return context
+    def get_context_data(self, *, object_list=None, **kwargs):
+        form = SearchForm(data=self.request.GET)
+        if form.is_valid():
+            search = form.cleaned_data['search']
+            kwargs['search'] = search
+        kwargs['form'] = form
+        return super().get_context_data(object_list=object_list, **kwargs)
 
     def get_queryset(self):
         data = Tasks.objects.all()
-        search = self.request.GET.get('search')
-        if search:
-            data = data.filter(summary__icontains=search)
-        return data.order_by('task_create')
+
+        form = SearchForm(data=self.request.GET)
+        if form.is_valid():
+            search = form.cleaned_data['search']
+            if search:
+                data = data.filter(Q(summary__icontains=search) | Q(description__icontains=search))
+
+        return data.order_by('-task_create')
 
 
 class TaskView(TemplateView):
     template_name = 'task_view.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 

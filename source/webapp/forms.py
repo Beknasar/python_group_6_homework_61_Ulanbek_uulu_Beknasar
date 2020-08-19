@@ -3,6 +3,9 @@ from django.core.exceptions import ValidationError
 
 from .models import Status, Type, Tasks
 
+class SearchForm(forms.Form):
+    search = forms.CharField(max_length=100, required=False, label="Найти")
+
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Tasks

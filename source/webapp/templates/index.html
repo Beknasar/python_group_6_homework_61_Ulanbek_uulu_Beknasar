@@ -2,6 +2,14 @@
 {% block title %}Tasks{% endblock %}
 {% block styles %}<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">{% endblock %}
 
+{% block search %}
+    <div class="search-form">
+            <form action="{% url 'index' %}" method="GET">
+                <input type="text" name="search">
+                <input type="submit" value="Найти">
+            </form>
+        </div>
+{% endblock %}
 {% block content %}
 <h1>Задачи:</h1>
     <div class = "tasks">
@@ -16,5 +24,8 @@
             </div>
 		</div>
         {% endfor %}
+    {% if is_paginated %}
+        {% include 'partial/pagination.html' %}
+    {% endif %}
     </div>
 {% endblock %}
