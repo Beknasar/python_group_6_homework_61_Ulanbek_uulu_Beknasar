@@ -6,8 +6,9 @@ from webapp.models import Tasks, Project
 from django.views.generic import View, TemplateView, FormView, ListView, DetailView, CreateView
 
 from django.http import HttpResponseNotAllowed
-from .forms import TaskForm, SearchForm
+from .forms import TaskForm, SearchForm, ProjectForm
 from django.db.models import Q, F
+
 
 class IndexView(ListView):
     template_name = 'project/index.html'
@@ -62,7 +63,14 @@ class ProjectView(DetailView):
         else:
             return tasks, None, False
 
-# class ProjectCreateView():
+
+class ProjectCreateView(CreateView):
+    template_name = 'project/project_create.html'
+    form_class = ProjectForm
+    model = Project
+
+    def get_success_url(self):
+        return reverse('project_view', kwargs={'pk': self.object.pk})
 
 
 class TaskView(TemplateView):
