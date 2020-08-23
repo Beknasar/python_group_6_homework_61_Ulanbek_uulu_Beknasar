@@ -1,8 +1,9 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from webapp.models import Tasks, Project
-from django.views.generic import View, TemplateView, FormView, ListView
+from django.views.generic import View, TemplateView, FormView, ListView, DetailView, CreateView
 
 from django.http import HttpResponseNotAllowed
 from .forms import TaskForm, SearchForm
@@ -11,8 +12,8 @@ from django.db.models import Q, F
 class IndexView(ListView):
     template_name = 'project/index.html'
     context_object_name = 'projects'
-    paginate_by = 10
-    paginate_orphans = 2
+    paginate_by = 5
+    paginate_orphans = 0
 
     def get_context_data(self, *, object_list=None, **kwargs):
         form = SearchForm(data=self.request.GET)
@@ -34,6 +35,36 @@ class IndexView(ListView):
         return data.order_by('-date_start')
 
 
+class ProjectView(DetailView):
+    template_name = 'project/project_view.html'
+    model = Project
+    paginate_tasks_by = 5
+    paginate_tasks_orphans = 0
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        tasks, page, is_paginated = self.paginate_tasks(self.object)
+        context['tasks'] = tasks
+        context['page_obj'] = page
+        context['is_paginated'] = is_paginated
+
+        return context
+
+    def paginate_tasks(self, project):
+        tasks = project.tasks.all().order_by('-task_create')
+        if tasks.count() > 0:
+            paginator = Paginator(tasks, self.paginate_tasks_by, orphans=self.paginate_tasks_orphans)
+            page_number = self.request.GET.get('page', 1)
+            page = paginator.get_page(page_number)
+            is_paginated = paginator.num_pages > 1  # page.has_other_pages()
+            return page.object_list, page, is_paginated
+        else:
+            return tasks, None, False
+
+# class ProjectCreateView():
+
+
 class TaskView(TemplateView):
     template_name = 'task/task_view.html'
 
@@ -44,18 +75,6 @@ class TaskView(TemplateView):
         task = get_object_or_404(Tasks, pk=pk)
 
         context['task'] = task
-        return context
-
-class ProjectView(TemplateView):
-    template_name = 'project/project_view.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        pk = self.kwargs.get('pk')
-        project = get_object_or_404(Project, pk=pk)
-
-        context['project'] = project
         return context
 
 
@@ -69,6 +88,7 @@ class TaskCreateView(FormView):
 
     def get_success_url(self):
         return reverse('task_view', kwargs={'pk': self.task.pk})
+
 
 class UpdateView(FormView):
     template_name = 'task/task_update.html'
@@ -98,6 +118,7 @@ class UpdateView(FormView):
 
     def get_success_url(self):
         return reverse('task_view', kwargs={'pk': self.task.pk})
+
 
 class DeleteView(View):
     def get(self, request, *args, **kwargs):

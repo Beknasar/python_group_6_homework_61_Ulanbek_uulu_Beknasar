@@ -24,7 +24,7 @@
         {% if is_paginated %}
             {% include 'partial/pagination.html' %}
         {% endif %}
-        {% for task in project.tasks.all %}
+        {% for task in tasks %}
             <div class="box">
                 <a href="{% url 'task_delete' task.pk %}" ><i class="far fa-trash-alt"></i></a>
                 <a href="{% url 'task_update' task.pk %}" ><i class="far fa-edit"></i></a><br/>
