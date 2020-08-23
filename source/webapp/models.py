@@ -1,9 +1,11 @@
 from django.core.validators import MinLengthValidator
 from django.db import models
-
+from django.utils import timezone
+from datetime import date
 
 
 class Tasks(models.Model):
+    project = models.ForeignKey('webapp.Project', related_name='tasks', on_delete=models.PROTECT, verbose_name='проект')
     summary = models.CharField(default='My title', max_length=200, null=False, blank=False, verbose_name='Название',
                                validators=[MinLengthValidator(10)])
     description = models.TextField(max_length=2000, null=True, blank=True, verbose_name='Описание')
@@ -38,3 +40,16 @@ class Type(models.Model):
     class Meta:
         verbose_name = 'Тип'
         verbose_name_plural = 'Типы'
+
+class Project(models.Model):
+    date_start = models.DateField(verbose_name='Дата начала', default=date.today)
+    date_end = models.DateField(verbose_name='Дата окончания', blank=True, null=True)
+    name = models.CharField(max_length=300, verbose_name='Название проекта')
+    description = models.TextField(max_length=2000, null=True, blank=True, verbose_name='Описание')
+
+    def __str__(self):
+        return "{}. {}".format(self.pk, self.name)
+
+    class Meta:
+        verbose_name = 'Проект'
+        verbose_name_plural = 'Проекты'
