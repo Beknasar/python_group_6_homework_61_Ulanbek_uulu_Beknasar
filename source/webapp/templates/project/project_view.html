@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}View{% endblock %}
+
+{#{% block menu %}#}
+{#    <li><a href="{% url 'article_update' article.pk %}">Update</a></li>#}
+{#    <li><a href="{% url 'article_delete' article.pk %}">Delete</a></li>#}
+{#    <li><a href="{% url 'article_comment_add' article.pk %}">Add Comment</a></li>#}
+{#{% endblock %}#}
+
+{% block content %}
+    <div class="box">
+        <h1>{{ project.name }}</h1>
+        <p class="pre">{{ project.description }}</p>
+        <p>Date start: {{ project.date_start }}</p>
+        <p>Date end:
+        {% if project.date_end %}
+            {{ project.date_end}}
+        {% else %}
+            No end date
+        {% endif %}</p>
+        <hr>
+        <h3>Tasks:</h3>
+        {% if is_paginated %}
+            {% include 'partial/pagination.html' %}
+        {% endif %}
+        {% for task in project.tasks.all %}
+            <div class="box">
+                <a href="{% url 'task_delete' task.pk %}" ><i class="far fa-trash-alt"></i></a>
+                <a href="{% url 'task_update' task.pk %}" ><i class="far fa-edit"></i></a><br/>
+                <h3><a href="/tasks/{{ task.pk }}" class="card-button">{{ task.summary }}</a></h3>
+                <p>Статус: {{ task.status }}</p>
+                <p>Дата выполнения: {{ task.task_create }}</p>
+            </div>
+        {% empty %}
+            <p>Нет задач</p>
+        {% endfor %}
+        {% if is_paginated %}
+            {% include 'partial/pagination.html' %}
+        {% endif %}
+    </div>
+{% endblock %}

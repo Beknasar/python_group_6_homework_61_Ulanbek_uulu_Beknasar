@@ -13,14 +13,20 @@
 {% block content %}
 <h1>Задачи:</h1>
     <div class = "tasks">
-        {% for task in tasks %}
+        {% for project in projects %}
+{#            <div class="card">#}
+{#                <div class="card-content">#}
+{#                <a href="{% url 'task_delete' task.pk %}" ><i class="far fa-trash-alt"></i></a>#}
+{#                <a href="{% url 'task_update' task.pk %}" ><i class="far fa-edit"></i></a><br/>#}
+{#                <h3><a href="/tasks/{{ task.pk }}" class="card-button">{{ task.summary }}</a></h3>#}
+{#                <p>Статус: {{ task.status }}</p>#}
+{#                <p>Дата выполнения: {{ task.task_create }}</p>#}
+{#            </div>#}
+{#		</div>#}
             <div class="card">
                 <div class="card-content">
-                <a href="{% url 'task_delete' task.pk %}" ><i class="far fa-trash-alt"></i></a>
-                <a href="{% url 'task_update' task.pk %}" ><i class="far fa-edit"></i></a><br/>
-                <h3><a href="/tasks/{{ task.pk }}" class="card-button">{{ task.summary }}</a></h3>
-                <p>Статус: {{ task.status }}</p>
-                <p>Дата выполнения: {{ task.task_create }}</p>
+                <h3><a href="{% url 'project_view' project.pk %}" class="card-button">{{ project.name }}</a></h3>
+                <p>Дата начала: {{ project.date_start }}</p>
             </div>
 		</div>
         {% endfor %}
