@@ -8,7 +8,7 @@
 {#    <li><a href="{% url 'article_comment_add' article.pk %}">Add Comment</a></li>#}
 {#{% endblock %}#}
 {% block menu %}
-          <li><a href="{% url 'task_create' %}">Add Task</a></li>
+          <li><a href="{% url 'task_create' project.pk %}">Add Task</a></li>
 {% endblock %}
 {% block content %}
     <div class="box">
