@@ -27,11 +27,11 @@ class IndexView(ListView):
     def get_queryset(self):
         data = Project.objects.all()
 
-        # form = SearchForm(data=self.request.GET)
-        # if form.is_valid():
-        #     search = form.cleaned_data['search']
-        #     if search:
-        #         data = data.filter(Q(summary__icontains=search) | Q(description__icontains=search))
+        form = SearchForm(data=self.request.GET)
+        if form.is_valid():
+            search = form.cleaned_data['search']
+            if search:
+                data = data.filter(Q(name__icontains=search) | Q(description__icontains=search))
 
         return data.order_by('-date_start')
 
@@ -72,6 +72,30 @@ class ProjectCreateView(CreateView):
     def get_success_url(self):
         return reverse('project_view', kwargs={'pk': self.object.pk})
 
+class TaskListView(ListView):
+    template_name = 'task/task_list.html'
+    context_object_name = 'tasks'
+    paginate_by = 10
+    paginate_orphans = 1
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        form = SearchForm(data=self.request.GET)
+        if form.is_valid():
+            search = form.cleaned_data['search']
+            kwargs['search'] = search
+        kwargs['form'] = form
+        return super().get_context_data(object_list=object_list, **kwargs)
+
+    def get_queryset(self):
+        data = Tasks.objects.all()
+
+        form = SearchForm(data=self.request.GET)
+        if form.is_valid():
+            search = form.cleaned_data['search']
+            if search:
+                data = data.filter(Q(summary__icontains=search) | Q(description__icontains=search))
+
+        return data.order_by('-task_create')
 
 class TaskView(TemplateView):
     template_name = 'task/task_view.html'
