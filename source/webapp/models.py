@@ -44,7 +44,7 @@ class Type(models.Model):
 class Project(models.Model):
     date_start = models.DateField(verbose_name='Дата начала', default=date.today)
     date_end = models.DateField(verbose_name='Дата окончания', blank=True, null=True)
-    name = models.CharField(max_length=300, verbose_name='Название проекта')
+    name = models.CharField(default='HELLO WORLD!', max_length=300, verbose_name='Название проекта')
     description = models.TextField(max_length=2000, null=True, blank=True, verbose_name='Описание')
 
     def __str__(self):

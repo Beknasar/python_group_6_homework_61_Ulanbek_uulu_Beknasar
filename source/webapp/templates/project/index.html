@@ -18,9 +18,11 @@
                 <div class="card-content">
                 <h3><a href="{% url 'project_view' project.pk %}" class="card-button">{{ project.name }}</a></h3>
                 <p>Дата начала: {{ project.date_start }}</p>
+                <p>Дата завершения: {{ project.date_end }}</p>
             </div>
-		</div>
+        </div>
         {% endfor %}
+
     {% if is_paginated %}
         {% include 'partial/pagination.html' %}
     {% endif %}

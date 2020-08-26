@@ -185,10 +185,6 @@ body {
     padding: 3px;
 }
 
-.pagination {
- text-align: center;
-}
-
 .pagination a, .pagination .page-disabled {
     display: inline-block;
     border: solid 1px darkslategrey;

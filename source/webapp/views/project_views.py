@@ -1,11 +1,11 @@
 from django.core.paginator import Paginator
 from django.urls import reverse, reverse_lazy
 
-from webapp.models import  Project
+from webapp.models import Project
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from webapp.forms import SearchForm, ProjectForm
-from django.db.models import Q, F
+from django.db.models import Q
 
 
 class IndexView(ListView):
