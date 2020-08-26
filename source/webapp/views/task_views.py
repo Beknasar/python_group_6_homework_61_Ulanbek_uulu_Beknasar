@@ -75,8 +75,3 @@ class TaskDeleteView(DeleteView):
     template_name = 'task/task_delete.html'
     model = Tasks
     success_url = reverse_lazy('index')
-    # def get(self, request, *args, **kwargs):
-    #     return render(request, 'task/task_delete.html', context={'task': task})
-    #
-    # def get_success_url(self):
-    #     return reverse('task_view', kwargs={'pk': self.object.pk})
