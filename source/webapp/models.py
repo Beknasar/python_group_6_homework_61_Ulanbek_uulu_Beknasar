@@ -5,7 +5,7 @@ from datetime import date
 
 
 class Tasks(models.Model):
-    project = models.ForeignKey('webapp.Project', related_name='tasks', on_delete=models.PROTECT, verbose_name='проект')
+    project = models.ForeignKey('webapp.Project', related_name='tasks', on_delete=models.CASCADE, verbose_name='проект')
     summary = models.CharField(default='My title', max_length=200, null=False, blank=False, verbose_name='Название',
                                validators=[MinLengthValidator(10)])
     description = models.TextField(max_length=2000, null=True, blank=True, verbose_name='Описание')
