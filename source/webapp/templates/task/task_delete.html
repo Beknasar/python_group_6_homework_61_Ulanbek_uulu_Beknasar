@@ -3,19 +3,19 @@
 {% block title %}Delete{% endblock %}
 
 {% block menu %}
-    <li><a href="{% url 'task_view' task.pk %}">Отмена</a></li>
+    <li><a href="{% url 'task_view' tasks.pk %}">Отмена</a></li>
 {% endblock %}
 
 {% block content %}
-    <h1>Вы уверены, что хотите удалить задачу "{{ task.summary }}"?</h1>
-    <p>Type: {% for type in task.types.all %}{{ type.name }}{% if not forloop.last %}, {% endif %}{% endfor %}. </p>
+    <h1>Вы уверены, что хотите удалить задачу "{{ tasks.summary }}"?</h1>
+    <p>Type: {% for type in tasks.types.all %}{{ type.name }}{% if not forloop.last %}, {% endif %}{% endfor %}. </p>
     <p>Status: {{ task.status }}</p>
-    <p>Date create: {{ task.task_create }}</p>
-    <form action="{% url "task_delete" task.pk %}" method="post">
+    <p>Date create: {{ tasks.task_create }}</p>
+    <form action="{% url "task_delete" tasks.pk %}" method="post">
         {% csrf_token %}
-       <button type="submit" value="Да" class="button accept">Подтвердить</button>
-    <a href="{% url 'task_view' task.pk %}" class="button cancel">Отмена</a>
+        <button type="submit" value="Да" class="button accept">Подтвердить</button>
+        <a href="{% url 'task_view' tasks.pk %}" class="button cancel">Отмена</a>
     </form>
     <h3>Содержимое статьи: </h3>
-    <p>{{ task.description }}</p>
+    <p>{{ tasks.description }}</p>
 {% endblock %}
