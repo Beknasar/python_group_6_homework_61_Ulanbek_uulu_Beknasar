@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path
 from webapp.views import IndexView, TaskCreateView, TaskDeleteView, TaskView, TaskUpdateView, \
     ProjectView, ProjectCreateView, TaskListView, ProjectUpdateView, ProjectDeleteView
+from django.contrib.auth.views import LoginView, LogoutView
+# from accounts.views import login_view, logout_view
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,5 +36,7 @@ urlpatterns = [
     path('tasks/<int:pk>/delete/', TaskDeleteView.as_view(), name='task_delete'),
     path('tasks/<int:pk>/update/', TaskUpdateView.as_view(), name='task_update'),
 
+    path('accounts/login/', LoginView.as_view(), name='login'),
+    path('accounts/logout/', LogoutView.as_view(), name='logout'),
 
 ]
