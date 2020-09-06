@@ -4,8 +4,6 @@ from django import forms
 
 
 class MyUserCreationForm(UserCreationForm):
-    class Meta:
-        model = User
+    class Meta(UserCreationForm.Meta):
         fields = ['username', 'password1', 'password2',
                   'first_name', 'last_name', 'email']
-        field_classes = {'username': UsernameField}
