@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from webapp.views import IndexView, TaskCreateView, TaskDeleteView, TaskView, TaskUpdateView, \
     ProjectView, ProjectCreateView, TaskListView, ProjectUpdateView, ProjectDeleteView
 from django.contrib.auth.views import LoginView, LogoutView
@@ -25,18 +25,19 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', IndexView.as_view(), name='index'),
-    path('project/<int:pk>/', ProjectView.as_view(), name='project_view'),
-    path('project/add/', ProjectCreateView.as_view(), name='project_create'),
-    path('project/<int:pk>/update', ProjectUpdateView.as_view(), name='project_update'),
-    path('project/<int:pk>/delete', ProjectDeleteView.as_view(), name='project_delete'),
+    path('project/', include([
+    path('<int:pk>/', ProjectView.as_view(), name='project_view'),
+    path('add/', ProjectCreateView.as_view(), name='project_create'),
+    path('<int:pk>/update', ProjectUpdateView.as_view(), name='project_update'),
+    path('<int:pk>/delete', ProjectDeleteView.as_view(), name='project_delete'),
+    path('<int:pk>/tasks/add/', TaskCreateView.as_view(), name='task_create'),
+    ])),
 
     path('tasks/', TaskListView.as_view(), name='task_list'),
-    path('project/<int:pk>/tasks/add/', TaskCreateView.as_view(), name='task_create'),
     path('tasks/<int:pk>/', TaskView.as_view(), name='task_view'),
     path('tasks/<int:pk>/delete/', TaskDeleteView.as_view(), name='task_delete'),
     path('tasks/<int:pk>/update/', TaskUpdateView.as_view(), name='task_update'),
 
-    path('accounts/login/', LoginView.as_view(), name='login'),
-    path('accounts/logout/', LogoutView.as_view(), name='logout'),
+    path('accounts/', include('accounts.urls')),
 
 ]
