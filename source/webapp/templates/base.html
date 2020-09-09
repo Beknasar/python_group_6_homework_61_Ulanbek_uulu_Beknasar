@@ -20,11 +20,15 @@
         {% if request.user.is_authenticated %}
             <li><a href="{% url 'project_create' %}">Add Project</a></li>
             {% block menu %}{% endblock %}
-            <li><a href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}">Logout</a></li>
-        {% else %}
-            <li><a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}">Login</a></li>
-            <li><a href="{% url 'accounts:create' %}?next={{ request.get_full_path }}">Sign Up</a></li>
         {% endif %}
+        {% block auth_menu %}
+            {% if request.user.is_authenticated %}
+                <li><a href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}">Login</a></li>
+                <li><a href="{% url 'accounts:create' %}?next={{ request.get_full_path }}">Sign Up</a></li>
+            {% endif %}
+        {% endblock %}
         </ul>
         {% block search %}
         {% endblock %}
