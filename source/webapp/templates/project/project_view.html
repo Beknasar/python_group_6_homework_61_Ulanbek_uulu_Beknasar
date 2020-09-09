@@ -11,6 +11,10 @@
     <div class="box">
         <h1>{{ project.name }}</h1>
         <p class="pre">{{ project.description }}</p>
+        <p>Пользователи:</p>
+        {% for author in project.author.all %}
+            <p>{{ author }}</p>
+        {% endfor %}
         <p>Date start: {{ project.date_start }}</p>
         <p>Date end:
         {% if project.date_end %}

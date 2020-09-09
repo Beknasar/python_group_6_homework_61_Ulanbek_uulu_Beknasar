@@ -50,7 +50,7 @@ class Project(models.Model):
     date_end = models.DateField(verbose_name='Дата окончания', blank=True, null=True)
     name = models.CharField(default='HELLO WORLD!', max_length=300, verbose_name='Название проекта')
     description = models.TextField(max_length=2000, null=True, blank=True, verbose_name='Описание')
-    author = models.ManyToManyField(get_user_model(), related_name='projects', blank=True, verbose_name='Пользователь')
+    author = models.ManyToManyField(get_user_model(), related_name='projects', blank=True, verbose_name='Пользователь', default=1)
 
     def __str__(self):
         return "{}. {}".format(self.pk, self.name)

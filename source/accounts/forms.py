@@ -4,6 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 
+
 class MyUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         fields = ['username', 'password1', 'password2',

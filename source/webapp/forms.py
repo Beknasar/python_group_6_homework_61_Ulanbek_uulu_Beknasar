@@ -3,8 +3,10 @@ from django.core.exceptions import ValidationError
 
 from .models import Status, Type, Tasks, Project
 
+
 class SearchForm(forms.Form):
     search = forms.CharField(max_length=100, required=False, label="Найти")
+
 
 class TaskForm(forms.ModelForm):
     class Meta:
@@ -20,7 +22,9 @@ class TaskForm(forms.ModelForm):
             raise ValidationError("Text of task should not dublicate it is title!")
         return cleaned_data
 
+
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'description', 'date_start', 'date_end']
+        fields = ['name', 'description', 'date_start', 'date_end', 'author']
+        widgets = {'author': forms.CheckboxSelectMultiple}
