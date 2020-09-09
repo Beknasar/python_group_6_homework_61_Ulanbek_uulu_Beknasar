@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils import timezone
@@ -21,6 +22,7 @@ class Tasks(models.Model):
         verbose_name = "Задача"
         verbose_name_plural = "Задачи"
 
+
 class Status(models.Model):
     name = models.CharField(default='Task', max_length=20, null=False, blank=False, verbose_name='Название статуса')
 
@@ -30,6 +32,7 @@ class Status(models.Model):
     class Meta:
         verbose_name='Статус'
         verbose_name_plural='Статусы'
+
 
 class Type(models.Model):
     name = models.CharField(default='New', max_length=20, null=False, blank=False, verbose_name='Название типа')
@@ -41,11 +44,13 @@ class Type(models.Model):
         verbose_name = 'Тип'
         verbose_name_plural = 'Типы'
 
+
 class Project(models.Model):
     date_start = models.DateField(verbose_name='Дата начала', default=date.today)
     date_end = models.DateField(verbose_name='Дата окончания', blank=True, null=True)
     name = models.CharField(default='HELLO WORLD!', max_length=300, verbose_name='Название проекта')
     description = models.TextField(max_length=2000, null=True, blank=True, verbose_name='Описание')
+    author = models.ManyToManyField(get_user_model(), related_name='projects', blank=True, verbose_name='Пользователь')
 
     def __str__(self):
         return "{}. {}".format(self.pk, self.name)
