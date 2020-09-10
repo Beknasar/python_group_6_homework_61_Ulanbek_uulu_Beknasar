@@ -69,6 +69,11 @@ class ProjectCreateView(PermissionRequiredMixin, CreateView):
     model = Project
     permission_required = 'webapp.add_project'
 
+    def form_valid(self, form):
+        form.save()
+        form.instance.author.add(self.request.user)
+        return super().form_valid(form)
+
     def get_success_url(self):
         return reverse('project_view', kwargs={'pk': self.object.pk})
 
