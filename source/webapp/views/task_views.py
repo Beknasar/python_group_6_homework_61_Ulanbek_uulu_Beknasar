@@ -63,8 +63,9 @@ class TaskCreateView(PermissionRequiredMixin, CreateView):
         return redirect('project_view', pk=project.pk)
 
     def has_permission(self):
-        task = self.get_object()
-        return super().has_permission() or self.request.user in task.project.author.all()
+        project = get_object_or_404(Project, pk=self.kwargs.get('pk'))
+        return super().has_permission() and self.request.user in project.author.all()
+
 
 class TaskUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'task/task_update.html'
@@ -73,6 +74,9 @@ class TaskUpdateView(PermissionRequiredMixin, UpdateView):
     context_object_name = 'task'
     permission_required = 'webapp.change_tasks'
 
+    def has_permission(self):
+        task = self.get_object()
+        return super().has_permission() and self.request.user in task.project.author.all()
 
     def get_success_url(self):
         return reverse('task_view', kwargs={'pk': self.object.pk})
@@ -83,3 +87,7 @@ class TaskDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'webapp.delete_tasks'
     model = Tasks
     success_url = reverse_lazy('index')
+
+    def has_permission(self):
+        task = self.get_object()
+        return super().has_permission() and self.request.user in task.project.author.all()

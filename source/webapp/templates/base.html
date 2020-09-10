@@ -18,7 +18,7 @@
             <li><a href="{% url 'index' %}">Home</a></li>
             <li><a href="{% url 'task_list' %}">Tasks</a></li>
         {% if request.user.is_authenticated %}
-            {% if perms.webapp.change_project %}
+            {% if perms.webapp.change_project and request.user.groups.all or request.user.pk == 1 %}
                 <li><a href="{% url 'project_create' %}">Add Project</a></li>
             {% endif %}
             <li><a href="#">Привет, {{ request.user.get_full_name|default:request.user.username }}</a></li>

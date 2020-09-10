@@ -3,10 +3,10 @@
 {% block title %}View{% endblock %}
 
 {% block menu %}
-    {% if perms.webapp.change_project %}
+    {% if perms.webapp.change_project or request.user.pk == 1 %}
         <li><a href="{% url 'project_update' project.pk %}">Update Project</a></li>
     {% endif %}
-    {% if perms.webapp.delete_project %}
+    {% if perms.webapp.change_project or request.user.pk == 1 %}
         <li><a href="{% url 'project_delete' project.pk %}">Delete Project</a></li>
     {% endif %}
     {% if perms.webapp.change_project and request.user in project.author.all %}

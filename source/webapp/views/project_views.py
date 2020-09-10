@@ -77,6 +77,9 @@ class ProjectCreateView(PermissionRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('project_view', kwargs={'pk': self.object.pk})
 
+    def has_permission(self):
+        return super().has_permission() and self.request.user.groups.filter(pk=2) or self.request.user.pk == 1
+
 
 class ProjectUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'project/project_update.html'
@@ -88,12 +91,18 @@ class ProjectUpdateView(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('project_view', kwargs={'pk': self.object.pk})
 
+    def has_permission(self):
+        return super().has_permission() and self.request.user.groups.filter(pk=2) or self.request.user.pk == 1
+
 
 class ProjectDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'project/project_delete.html'
     model = Project
     success_url = reverse_lazy('index')
     permission_required = 'webapp.delete_project'
+
+    def has_permission(self):
+        return super().has_permission() and self.request.user.groups.filter(pk=2) or self.request.user.pk == 1
 
 
 class ProjectPermissonUpdateView(PermissionRequiredMixin, UpdateView):
