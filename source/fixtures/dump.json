@@ -244,7 +244,10 @@
     "date_start": "2020-08-23",
     "date_end": null,
     "name": "\u041c\u0443\u0441\u043e\u0440\u043d\u044b\u0435 \u0437\u0430\u0434\u0430\u0447\u0438",
-    "description": ""
+    "description": "",
+    "author": [
+      1
+    ]
   }
 },
 {
@@ -254,7 +257,10 @@
     "date_start": "2020-08-23",
     "date_end": "2020-08-24",
     "name": "First project",
-    "description": "First description"
+    "description": "First description",
+    "author": [
+      1
+    ]
   }
 },
 {
@@ -264,7 +270,10 @@
     "date_start": "2020-08-25",
     "date_end": "2025-08-25",
     "name": "\u0421\u0434\u0435\u043b\u0430\u0442\u044c \u0438\u0433\u0440\u043e\u0432\u043e\u0439 \u0441\u0430\u0439\u0442",
-    "description": "\u041a \u043f\u0440\u0438\u043c\u0435\u0440\u0443 \u043a\u0430\u043a \u0434\u0438\u043d\u043e\u0437\u0430\u0432\u0440\u0438\u043a \u043a\u043e\u0433\u0434\u0430 \u043d\u0435\u0442\u0443 \u0438\u043d\u0442\u0435\u0440\u043d\u0435\u0442\u0430"
+    "description": "\u041a \u043f\u0440\u0438\u043c\u0435\u0440\u0443 \u043a\u0430\u043a \u0434\u0438\u043d\u043e\u0437\u0430\u0432\u0440\u0438\u043a \u043a\u043e\u0433\u0434\u0430 \u043d\u0435\u0442\u0443 \u0438\u043d\u0442\u0435\u0440\u043d\u0435\u0442\u0430",
+    "author": [
+      1
+    ]
   }
 },
 {
@@ -274,7 +283,10 @@
     "date_start": "2020-08-24",
     "date_end": "2020-08-20",
     "name": "\u0418\u0437\u0443\u0447\u0438\u0442\u044c C#",
-    "description": "\u041d\u0430\u043f\u0438\u0441\u0430\u0442\u044c \u0438\u0433\u0440\u0443 \u043d\u0430 C# \u0432 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0435 Unity."
+    "description": "\u041d\u0430\u043f\u0438\u0441\u0430\u0442\u044c \u0438\u0433\u0440\u0443 \u043d\u0430 C# \u0432 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0435 Unity.",
+    "author": [
+      1
+    ]
   }
 },
 {
@@ -284,7 +296,10 @@
     "date_start": "2012-01-24",
     "date_end": "2020-08-24",
     "name": "Build the City",
-    "description": "Name: Vostorg\r\nWhere: In Sea."
+    "description": "Name: Vostorg\r\nWhere: In Sea.",
+    "author": [
+      1
+    ]
   }
 },
 {
@@ -294,25 +309,10 @@
     "date_start": "2020-08-27",
     "date_end": null,
     "name": "\u041d\u0430\u043f\u0438\u0441\u0430\u0442\u044c \u0441\u0432\u043e\u0435\u0433\u043e \u0431\u043e\u0442\u0430",
-    "description": "\u041f\u043e\u043a\u0430 \u043d\u0435 \u043f\u0440\u0438\u0434\u0443\u043c\u0430\u043b \u0437\u0430\u0447\u0435\u043c"
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 1,
-  "fields": {
-    "password": "pbkdf2_sha256$150000$2AGceqXYKRFA$op51ry20GGk63zbxZ4mVoJuznZWVeHhMK/8jn18Ezk0=",
-    "last_login": "2020-08-23T14:24:21.518Z",
-    "is_superuser": true,
-    "username": "admin",
-    "first_name": "",
-    "last_name": "",
-    "email": "",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2020-08-07T05:35:20.991Z",
-    "groups": [],
-    "user_permissions": []
+    "description": "\u041f\u043e\u043a\u0430 \u043d\u0435 \u043f\u0440\u0438\u0434\u0443\u043c\u0430\u043b \u0437\u0430\u0447\u0435\u043c",
+    "author": [
+      1
+    ]
   }
 }
 ]
