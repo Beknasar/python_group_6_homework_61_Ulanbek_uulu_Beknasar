@@ -103,5 +103,8 @@ class ProjectPermissonUpdateView(PermissionRequiredMixin, UpdateView):
     context_object_name = 'project'
     permission_required = 'webapp.change_project'
 
+    def has_permission(self):
+        return super().has_permission() and self.request.user in self.get_object().author.all()
+
     def get_success_url(self):
         return reverse('project_view', kwargs={'pk': self.object.pk})

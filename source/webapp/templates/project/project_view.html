@@ -9,10 +9,10 @@
     {% if perms.webapp.delete_project %}
         <li><a href="{% url 'project_delete' project.pk %}">Delete Project</a></li>
     {% endif %}
-    {% if perms.webapp.change_project %}
+    {% if perms.webapp.change_project and request.user in project.author.all %}
         <li><a href="{% url 'project_user_edit' project.pk %}">Edit User</a></li>
     {% endif %}
-    {% if perms.webapp.create_tasks %}
+    {% if perms.webapp.add_tasks and request.user in project.author.all %}
         <li><a href="{% url 'task_create' project.pk %}">Add Task</a></li>
     {% endif %}
 {% endblock %}

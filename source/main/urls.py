@@ -26,12 +26,12 @@ urlpatterns = [
 
     path('', IndexView.as_view(), name='index'),
     path('project/', include([
-    path('<int:pk>/', ProjectView.as_view(), name='project_view'),
-    path('add/', ProjectCreateView.as_view(), name='project_create'),
-    path('<int:pk>/update', ProjectUpdateView.as_view(), name='project_update'),
-    path('<int:pk>/delete', ProjectDeleteView.as_view(), name='project_delete'),
-    path('<int:pk>/tasks/add/', TaskCreateView.as_view(), name='task_create'),
-    path('<int:pk>/edit_user', ProjectPermissonUpdateView.as_view(), name='project_user_edit')
+        path('<int:pk>/', ProjectView.as_view(), name='project_view'),
+        path('add/', ProjectCreateView.as_view(), name='project_create'),
+        path('<int:pk>/update', ProjectUpdateView.as_view(), name='project_update'),
+        path('<int:pk>/delete', ProjectDeleteView.as_view(), name='project_delete'),
+        path('<int:pk>/tasks/add/', TaskCreateView.as_view(), name='task_create'),
+        path('<int:pk>/edit_user', ProjectPermissonUpdateView.as_view(), name='project_user_edit')
     ])),
 
     path('tasks/', TaskListView.as_view(), name='task_list'),

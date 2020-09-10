@@ -62,6 +62,9 @@ class TaskCreateView(PermissionRequiredMixin, CreateView):
         form.save_m2m()
         return redirect('project_view', pk=project.pk)
 
+    def has_permission(self):
+        task = self.get_object()
+        return super().has_permission() or self.request.user in task.project.author.all()
 
 class TaskUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'task/task_update.html'
@@ -69,6 +72,7 @@ class TaskUpdateView(PermissionRequiredMixin, UpdateView):
     model = Tasks
     context_object_name = 'task'
     permission_required = 'webapp.change_tasks'
+
 
     def get_success_url(self):
         return reverse('task_view', kwargs={'pk': self.object.pk})
