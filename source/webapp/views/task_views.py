@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 
@@ -48,10 +48,11 @@ class TaskView(TemplateView):
         return context
 
 
-class TaskCreateView(LoginRequiredMixin, CreateView):
+class TaskCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'task/task_create.html'
     form_class = TaskForm
     model = Tasks
+    permission_required = 'webapp.add_tasks'
 
     def form_valid(self, form):
         project = get_object_or_404(Project, pk=self.kwargs.get('pk'))
@@ -62,17 +63,19 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         return redirect('project_view', pk=project.pk)
 
 
-class TaskUpdateView(LoginRequiredMixin, UpdateView):
+class TaskUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'task/task_update.html'
     form_class = TaskForm
     model = Tasks
     context_object_name = 'task'
+    permission_required = 'webapp.change_tasks'
 
     def get_success_url(self):
         return reverse('task_view', kwargs={'pk': self.object.pk})
 
 
-class TaskDeleteView(LoginRequiredMixin, DeleteView):
+class TaskDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'task/task_delete.html'
+    permission_required = 'webapp.delete_tasks'
     model = Tasks
     success_url = reverse_lazy('index')

@@ -1,11 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.urls import reverse, reverse_lazy
 
 from webapp.models import Project
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
-from webapp.forms import SearchForm, ProjectForm
+from webapp.forms import SearchForm, ProjectForm, ProjectUpdateForm
 from django.db.models import Q
 
 
@@ -63,28 +63,40 @@ class ProjectView(DetailView):
             return tasks, None, False
 
 
-class ProjectCreateView(LoginRequiredMixin, CreateView):
+class ProjectCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'project/project_create.html'
     form_class = ProjectForm
     model = Project
+    permission_required = 'webapp.add_project'
 
     def get_success_url(self):
         return reverse('project_view', kwargs={'pk': self.object.pk})
 
 
-class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+class ProjectUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'project/project_update.html'
     form_class = ProjectForm
     model = Project
     context_object_name = 'project'
+    permission_required = 'webapp.change_project'
 
     def get_success_url(self):
         return reverse('project_view', kwargs={'pk': self.object.pk})
 
 
-class ProjectDeleteView(LoginRequiredMixin, DeleteView):
+class ProjectDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'project/project_delete.html'
     model = Project
     success_url = reverse_lazy('index')
+    permission_required = 'webapp.delete_project'
 
 
+class ProjectPermissonUpdateView(PermissionRequiredMixin, UpdateView):
+    template_name = 'project/user_edit.html'
+    form_class = ProjectUpdateForm
+    model = Project
+    context_object_name = 'project'
+    permission_required = 'webapp.change_project'
+
+    def get_success_url(self):
+        return reverse('project_view', kwargs={'pk': self.object.pk})
