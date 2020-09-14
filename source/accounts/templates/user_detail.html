@@ -21,6 +21,6 @@
         <p>О себе:</p>
         <p class="pre">{{ user_obj.profile.about }}</p>
     </div>
-{#    <h2 class="text-center clear">Статьи автора:</h2>#}
-{#    {% include 'partial/project_list.html' %}#}
+    <h2 class="text-center clear">Статьи автора:</h2>
+    {% include 'partial/project_list.html' with projects=user_obj.projects.all %}
 {% endblock %}
