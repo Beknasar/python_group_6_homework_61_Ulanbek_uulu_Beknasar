@@ -22,7 +22,7 @@
         <p class="pre">{{ project.description }}</p>
         <p>Пользователи:</p>
         {% for author in project.author.all %}
-            <p>{{ author }}</p>
+            <a href="{% url 'accounts:detail' author.pk %}">{{ author }}</a><br/>
         {% endfor %}
         <p>Date start: {{ project.date_start }}</p>
         <p>Date end:
