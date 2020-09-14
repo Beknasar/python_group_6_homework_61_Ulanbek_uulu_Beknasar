@@ -1,13 +1,15 @@
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 
 from accounts.forms import MyUserCreationForm
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, ListView
+
 
 #
 # def login_view(request):
@@ -27,6 +29,8 @@ from django.views.generic import CreateView, DetailView
 # def logout_view(request):
 #     logout(request)
 #     return redirect('index')
+from webapp.forms import SearchForm
+from webapp.models import Project
 
 
 class RegisterView(CreateView):
@@ -46,6 +50,31 @@ class RegisterView(CreateView):
         if not next_url:
             next_url = reverse('index')
         return next_url
+
+
+class UserListView(PermissionRequiredMixin, ListView):
+    template_name = 'user_list.html'
+    context_object_name = 'users'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        form = SearchForm(data=self.request.GET)
+        if form.is_valid():
+            search = form.cleaned_data['search']
+            kwargs['search'] = search
+        kwargs['form'] = form
+        return super().get_context_data(object_list=object_list, **kwargs)
+
+    def get_queryset(self):
+        data = User.objects.all()
+        form = SearchForm(data=self.request.GET)
+        if form.is_valid():
+            search = form.cleaned_data['search']
+            if search:
+                data = data.filter(Q(name__icontains=search) | Q(description__icontains=search))
+        return data
+
+    def has_permission(self):
+        return self.request.user.groups.filter(pk=2) or self.request.user.groups.filter(pk=3) or self.request.user.pk == 1
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):

@@ -246,3 +246,12 @@ body {
 .clear {
     clear: both;
 }
+
+.table {
+    font-size: 25px;
+    border: solid black 2px;
+}
+.table td {
+    padding-right: 15px;
+    border: solid black 1px;
+}
