@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.contrib.auth.models import User
 from django import forms
@@ -29,3 +30,16 @@ class MyUserCreationForm(UserCreationForm):
         if errors:
             raise ValidationError(errors)
         return cleaned_data
+
+
+class UserChangeForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name', 'last_name', 'email']
+        labels = {'first_name': 'Имя', 'last_name': 'Фамилия', 'email': 'Email'}
+
+
+class ProfileChangeForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ['user']
