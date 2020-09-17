@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from accounts.forms import MyUserCreationForm, UserChangeForm, ProfileChangeForm
+from accounts.forms import MyUserCreationForm, UserChangeForm, ProfileChangeForm, PasswordChangeForm
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 #
@@ -104,6 +104,8 @@ class UserChangeView(UpdateView):
         return reverse('accounts:detail', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
+        print(self.request.user.pk)
+        print(self.object.profile.user_id)
         if 'profile_form' not in kwargs:
             kwargs['profile_form'] = self.get_profile_form()
         return super().get_context_data(**kwargs)
@@ -140,3 +142,12 @@ class UserChangeView(UpdateView):
         #     form = ProfileChangeForm(instance=self.object)
         # return form
 
+
+class UserPasswordChangeView(UpdateView):
+    model = get_user_model()
+    template_name = 'user_password_change.html'
+    form_class = PasswordChangeForm
+    context_object_name = 'user_obj'
+
+    def get_success_url(self):
+        return reverse('accounts:login')
