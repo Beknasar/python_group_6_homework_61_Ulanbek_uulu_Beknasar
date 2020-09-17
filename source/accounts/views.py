@@ -28,6 +28,7 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView
 # def logout_view(request):
 #     logout(request)
 #     return redirect('index')
+from accounts.models import Profile
 from webapp.forms import SearchForm
 from webapp.models import Project
 
@@ -94,7 +95,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         return super().get_context_data(**kwargs)
 
 
-class UserChangeView(UpdateView):
+class UserChangeView(PermissionRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = UserChangeForm
     template_name = 'user_change.html'
@@ -104,11 +105,12 @@ class UserChangeView(UpdateView):
         return reverse('accounts:detail', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
-        print(self.request.user.pk)
-        print(self.object.profile.user_id)
         if 'profile_form' not in kwargs:
             kwargs['profile_form'] = self.get_profile_form()
         return super().get_context_data(**kwargs)
+
+    def has_permission(self):
+        return self.request.user.pk == self.kwargs['pk']
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -143,11 +145,14 @@ class UserChangeView(UpdateView):
         # return form
 
 
-class UserPasswordChangeView(UpdateView):
+class UserPasswordChangeView(PermissionRequiredMixin, UpdateView):
     model = get_user_model()
     template_name = 'user_password_change.html'
     form_class = PasswordChangeForm
     context_object_name = 'user_obj'
+
+    def has_permission(self):
+        return self.request.user.pk == self.kwargs['pk']
 
     def get_success_url(self):
         return reverse('accounts:login')
